@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Very Important Message 💌</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --rose: #e8476a;
+    --blush: #fce4ec;
+    --cream: #fffbf5;
+    --gold: #c9a84c;
+    --dark: #2d1b2e;
+    --text: #4a2545;
+  }
+
+  body {
+    font-family: 'Lato', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Floating hearts background */
+  .hearts-bg {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  .heart-float {
+    position: absolute;
+    font-size: 1.2rem;
+    opacity: 0;
+    animation: floatUp 8s infinite ease-in;
+  }
+
+  @keyframes floatUp {
+    0% { opacity: 0; transform: translateY(110vh) rotate(0deg); }
+    10% { opacity: 0.4; }
+    90% { opacity: 0.2; }
+    100% { opacity: 0; transform: translateY(-10vh) rotate(360deg); }
+  }
+
+  /* Pages */
+  .page {
+    display: none;
+    min-height: 100vh;
+    position: relative;
+    z-index: 1;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    text-align: center;
+    animation: fadeIn 0.8s ease;
+  }
+
+  .page.active { display: flex; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Card */
+  .card {
+    background: white;
+    border-radius: 24px;
+    padding: 3rem 2.5rem;
+    max-width: 520px;
+    width: 100%;
+    box-shadow: 0 20px 60px rgba(232, 71, 106, 0.15), 0 4px 20px rgba(0,0,0,0.05);
+    border: 1px solid rgba(232, 71, 106, 0.1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--rose), var(--gold), var(--rose));
+    background-size: 200%;
+    animation: shimmer 3s infinite linear;
+  }
+
+  @keyframes shimmer {
+    0% { background-position: 0%; }
+    100% { background-position: 200%; }
+  }
+
+  .emoji-big {
+    font-size: 4rem;
+    display: block;
+    margin-bottom: 1.2rem;
+    animation: bounce 2s infinite ease-in-out;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: var(--dark);
+    margin-bottom: 0.8rem;
+    line-height: 1.3;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+    color: #888;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+  }
+
+  /* Buttons */
+  .btn-group {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 1.5rem;
+  }
+
+  .btn {
+    padding: 0.85rem 2rem;
+    border-radius: 50px;
+    border: none;
+    font-size: 1rem;
+    font-family: 'Lato', sans-serif;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+  }
+
+  .btn-yes {
+    background: linear-gradient(135deg, var(--rose), #c0355a);
+    color: white;
+    box-shadow: 0 4px 20px rgba(232, 71, 106, 0.4);
+  }
+
+  .btn-yes:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 30px rgba(232, 71, 106, 0.5);
+  }
+
+  .btn-no {
+    background: white;
+    color: #bbb;
+    border: 2px solid #eee;
+  }
+
+  .btn-no:hover {
+    background: #fff0f0;
+    color: var(--rose);
+    border-color: var(--rose);
+  }
+
+  /* Funny no button that runs away */
+  #no-btn-1 {
+    position: relative;
+    transition: all 0.2s;
+  }
+
+  /* Confetti */
+  .confetti-piece {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    top: -10px;
+    animation: confettiFall 3s ease-in forwards;
+    z-index: 999;
+  }
+
+  @keyframes confettiFall {
+    to { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+  }
+
+  /* Progress dots */
+  .progress {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 2rem;
+  }
+
+  .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #e0d5e0;
+    transition: background 0.4s;
+  }
+
+  .dot.active { background: var(--rose); }
+
+  /* Funny text animations */
+  .wiggle {
+    display: inline-block;
+    animation: wiggle 0.5s infinite;
+  }
+  @keyframes wiggle {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-5deg); }
+    75% { transform: rotate(5deg); }
+  }
+
+  /* Final success page */
+  .success-bg {
+    background: linear-gradient(135deg, #fce4ec, #fff9c4, #e8f5e9);
+    background-size: 400%;
+    animation: gradientShift 6s infinite ease;
+  }
+
+  @keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+
+  /* Form hidden */
+  .hidden-form { display: none; }
+
+  /* Input styles */
+  input[type="text"] {
+    width: 100%;
+    padding: 0.8rem 1.2rem;
+    border: 2px solid #eee;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-family: 'Lato', sans-serif;
+    margin-bottom: 1rem;
+    outline: none;
+    transition: border 0.3s;
+  }
+
+  input[type="text"]:focus { border-color: var(--rose); }
+
+  @media (max-width: 480px) {
+    h1 { font-size: 1.6rem; }
+    .card { padding: 2rem 1.5rem; }
+    .btn { padding: 0.75rem 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Floating hearts -->
+<div class="hearts-bg" id="heartsBg"></div>
+
+<!-- PAGE 1: Introduction -->
+<div class="page active" id="page1">
+  <div class="progress">
+    <div class="dot active"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+  </div>
+  <div class="card">
+    <span class="emoji-big">💌</span>
+    <h1>Hello, Madam!</h1>
+    <p class="subtitle">
+      <em style="font-family:'Playfair Display',serif; color:var(--rose);">Harsh</em> this side 👋<br><br>
+      I have a few very important questions for you.<br>
+      Can we move forward? 🥺
+    </p>
+    <div class="btn-group">
+      <button class="btn btn-yes" onclick="goTo(2)">Yes, of course! 💖</button>
+      <button class="btn btn-no" id="no-btn-1" onclick="noJoke1()">No</button>
+    </div>
+    <p id="no-msg-1" style="margin-top:1rem; color:#e8476a; font-style:italic; font-size:0.9rem; display:none;"></p>
+  </div>
+</div>
+
+<!-- PAGE 2: Will you go on a date? -->
+<div class="page" id="page2">
+  <div class="progress">
+    <div class="dot"></div>
+    <div class="dot active"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+  </div>
+  <div class="card">
+    <span class="emoji-big">🌹</span>
+    <h1>Will you go on a date with me?</h1>
+    <p class="subtitle">
+      I promise I'll be charming...<br>
+      or at least I'll try very hard. 😅
+    </p>
+    <div class="btn-group">
+      <button class="btn btn-yes" onclick="goTo(3)">Yes! 🥰</button>
+      <button class="btn btn-no" id="no-btn-2" onclick="noJoke2()">Hmm, No</button>
+    </div>
+    <p id="no-msg-2" style="margin-top:1rem; color:#e8476a; font-style:italic; font-size:0.9rem; display:none;"></p>
+  </div>
+</div>
+
+<!-- PAGE 3: Today at 7PM Sector 76 -->
+<div class="page" id="page3">
+  <div class="progress">
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot active"></div>
+    <div class="dot"></div>
+  </div>
+  <div class="card">
+    <span class="emoji-big">📍</span>
+    <h1>Today. 7 PM.<br>Sector 76. 🌆</h1>
+    <p class="subtitle">
+      I've already planned everything in my head.<br>
+      Now I just need <em style="font-family:'Playfair Display',serif; color:var(--rose);">you</em> to show up. 🙏
+    </p>
+    <div class="btn-group">
+      <button class="btn btn-yes" onclick="goTo(4)">I'll be there! 🫶</button>
+      <button class="btn btn-no" id="no-btn-3" onclick="noJoke3()">Maybe No</button>
+    </div>
+    <p id="no-msg-3" style="margin-top:1rem; color:#e8476a; font-style:italic; font-size:0.9rem; display:none;"></p>
+  </div>
+</div>
+
+<!-- PAGE 4: Can I hold your hand? -->
+<div class="page" id="page4">
+  <div class="progress">
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot active"></div>
+  </div>
+  <div class="card">
+    <span class="emoji-big">🤝</span>
+    <h1>One last question...</h1>
+    <p class="subtitle">
+      Okay so um... hypothetically speaking...<br>
+      if our hands were just <em>casually</em> near each other...<br>
+      could they maybe... hold each other? 🥺<br><br>
+      <small style="color:#bbb;">(asking for a friend named Harsh)</small>
+    </p>
+    <div class="btn-group">
+      <button class="btn btn-yes" onclick="submitYes()">Okay fine, yes 🤭</button>
+      <button class="btn btn-no" id="no-btn-4" onclick="noJoke4()">Never! 🙈</button>
+    </div>
+    <p id="no-msg-4" style="margin-top:1rem; color:#e8476a; font-style:italic; font-size:0.9rem; display:none;"></p>
+  </div>
+</div>
+
+<!-- PAGE 5: SUCCESS -->
+<div class="page success-bg" id="page5">
+  <div class="card" style="border:2px solid rgba(232,71,106,0.2);">
+    <span class="emoji-big" style="animation:none; font-size:5rem;">🎉</span>
+    <h1 style="font-size:2.2rem;">She said YES!!! 🥳</h1>
+    <p class="subtitle" style="font-size:1.1rem;">
+      Today, 7 PM, Sector 76.<br>
+      <strong style="color:var(--rose);">Don't be late, Harsh. 😏</strong><br><br>
+      See you soon! 🌹
+    </p>
+    <p style="color:#bbb; font-size:0.8rem; margin-top:1.5rem;">
+      (Notification sent to Harsh — he's probably jumping right now 💃)
+    </p>
+  </div>
+</div>
+
+<!-- Hidden Formspree form -->
+<form id="notify-form" action="https://formspree.io/f/mkovpokp" method="POST" class="hidden-form">
+  <input type="text" name="message" id="form-message">
+  <input type="text" name="_subject" value="💌 She Said YES!!!">
+</form>
+
+<script>
+  // Generate floating hearts
+  const heartsBg = document.getElementById('heartsBg');
+  const emojis = ['❤️','💕','💖','💗','🌹','✨','💝','💞'];
+  for (let i = 0; i < 20; i++) {
+    const h = document.createElement('div');
+    h.className = 'heart-float';
+    h.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    h.style.left = Math.random() * 100 + 'vw';
+    h.style.animationDelay = Math.random() * 8 + 's';
+    h.style.animationDuration = (6 + Math.random() * 6) + 's';
+    h.style.fontSize = (0.8 + Math.random() * 1.5) + 'rem';
+    heartsBg.appendChild(h);
+  }
+
+  function goTo(page) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page' + page).classList.add('active');
+    window.scrollTo(0, 0);
+  }
+
+  const noJokes = [
+    ["Excuse me?? The 'No' button is broken 😤", "Try clicking Yes instead!", "Did you mean YES? 🥺", "My 'No' button doesn't work here 🙈", "That button is just for decoration 😂"],
+    ["Wrong button, try the other one 😭", "No? Your finger slipped clearly 😂", "Did autocorrect make you press No?", "I'm going to pretend that didn't happen 🙉", "The universe says YES btw 🌟"],
+    ["Your GPS is already set to Sector 76 👀", "Too late, I already told my mom 😂", "The chai is already ordered... 🫖", "My heart already said yes for you 💔", "The 7PM slot is booked, sorry 📅"],
+    ["The hand is literally right here 🖐️", "My hand is now sad 😢", "Even my palm lines say yes 🔮", "I'll teach you palmistry so it counts 😂", "What if it was just a high-five? 🙈"],
+  ];
+
+  let noCounts = [0, 0, 0, 0];
+
+  function noJoke(pageNum) {
+    const jokes = noJokes[pageNum - 1];
+    const idx = Math.min(noCounts[pageNum - 1], jokes.length - 1);
+    const msg = document.getElementById('no-msg-' + pageNum);
+    msg.textContent = jokes[idx];
+    msg.style.display = 'block';
+    noCounts[pageNum - 1]++;
+
+    // Make the No button run away on desktop
+    const btn = document.getElementById('no-btn-' + pageNum);
+    const r = () => Math.random() * 200 - 100;
+    btn.style.transform = `translate(${r()}px, ${r()}px)`;
+    setTimeout(() => btn.style.transform = '', 1000);
+  }
+
+  function noJoke1() { noJoke(1); }
+  function noJoke2() { noJoke(2); }
+  function noJoke3() { noJoke(3); }
+  function noJoke4() { noJoke(4); }
+
+  function submitYes() {
+    // Send notification via Formspree
+    const form = document.getElementById('notify-form');
+    document.getElementById('form-message').value = '💌 SHE SAID YES TO EVERYTHING! Date confirmed: Today 7PM, Sector 76. She also said yes to holding hands! Go go go! 🎉';
+    
+    fetch(form.action, {
+      method: 'POST',
+      body: new FormData(form),
+      headers: { 'Accept': 'application/json' }
+    }).catch(() => {});  // silently succeed
+
+    confetti();
+    goTo(5);
+  }
+
+  function confetti() {
+    const colors = ['#e8476a','#c9a84c','#7c4dff','#00bcd4','#ff5722','#4caf50'];
+    for (let i = 0; i < 80; i++) {
+      const c = document.createElement('div');
+      c.className = 'confetti-piece';
+      c.style.left = Math.random() * 100 + 'vw';
+      c.style.background = colors[Math.floor(Math.random() * colors.length)];
+      c.style.width = (8 + Math.random() * 8) + 'px';
+      c.style.height = (8 + Math.random() * 8) + 'px';
+      c.style.animationDuration = (2 + Math.random() * 2) + 's';
+      c.style.animationDelay = Math.random() * 1 + 's';
+      c.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+      document.body.appendChild(c);
+      setTimeout(() => c.remove(), 5000);
+    }
+  }
+</script>
+</body>
+</html>
