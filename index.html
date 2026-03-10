@@ -4,49 +4,59 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>A Very Important Message 💌</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --rose: #e8476a;
+    --rose: #d4436b;
+    --rose-light: #f06292;
     --blush: #fce4ec;
-    --cream: #fffbf5;
-    --gold: #c9a84c;
-    --dark: #2d1b2e;
-    --text: #4a2545;
+    --cream: #fffaf6;
+    --gold: #c9935a;
+    --dark: #1e0e1f;
+    --text: #3d1a3e;
+    --muted: #9e7b9f;
+    --card-bg: #ffffff;
   }
 
   body {
-    font-family: 'Lato', sans-serif;
+    font-family: 'DM Sans', sans-serif;
     background: var(--cream);
     color: var(--text);
     min-height: 100vh;
     overflow-x: hidden;
   }
 
-  /* Floating hearts background */
+  /* Animated grain overlay */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.4;
+  }
+
+  /* Floating hearts */
   .hearts-bg {
     position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
+    inset: 0;
     pointer-events: none;
     z-index: 0;
     overflow: hidden;
   }
-
   .heart-float {
     position: absolute;
-    font-size: 1.2rem;
     opacity: 0;
-    animation: floatUp 8s infinite ease-in;
+    animation: floatUp 10s infinite ease-in;
   }
-
   @keyframes floatUp {
-    0% { opacity: 0; transform: translateY(110vh) rotate(0deg); }
-    10% { opacity: 0.4; }
-    90% { opacity: 0.2; }
-    100% { opacity: 0; transform: translateY(-10vh) rotate(360deg); }
+    0%   { opacity: 0; transform: translateY(110vh) rotate(0deg) scale(0.8); }
+    10%  { opacity: 0.35; }
+    90%  { opacity: 0.15; }
+    100% { opacity: 0; transform: translateY(-10vh) rotate(360deg) scale(1.2); }
   }
 
   /* Pages */
@@ -58,241 +68,359 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 2rem;
+    padding: 2rem 1rem;
     text-align: center;
-    animation: fadeIn 0.8s ease;
   }
-
-  .page.active { display: flex; }
-
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+  .page.active {
+    display: flex;
+    animation: fadeSlide 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  @keyframes fadeSlide {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
   }
 
   /* Card */
   .card {
-    background: white;
-    border-radius: 24px;
-    padding: 3rem 2.5rem;
-    max-width: 520px;
+    background: var(--card-bg);
+    border-radius: 28px;
+    padding: 3rem 2.5rem 2.5rem;
+    max-width: 500px;
     width: 100%;
-    box-shadow: 0 20px 60px rgba(232, 71, 106, 0.15), 0 4px 20px rgba(0,0,0,0.05);
-    border: 1px solid rgba(232, 71, 106, 0.1);
+    box-shadow:
+      0 30px 80px rgba(212, 67, 107, 0.12),
+      0 8px 30px rgba(0,0,0,0.06),
+      inset 0 1px 0 rgba(255,255,255,0.9);
+    border: 1px solid rgba(212, 67, 107, 0.08);
     position: relative;
     overflow: hidden;
   }
-
   .card::before {
     content: '';
     position: absolute;
     top: 0; left: 0; right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, var(--rose), var(--gold), var(--rose));
-    background-size: 200%;
-    animation: shimmer 3s infinite linear;
+    height: 3px;
+    background: linear-gradient(90deg, var(--rose), var(--gold), var(--rose-light), var(--rose));
+    background-size: 300%;
+    animation: shimmer 4s infinite linear;
   }
-
   @keyframes shimmer {
-    0% { background-position: 0%; }
-    100% { background-position: 200%; }
+    0%   { background-position: 0%; }
+    100% { background-position: 300%; }
+  }
+  .card-watermark {
+    position: absolute;
+    bottom: -20px;
+    right: -20px;
+    font-size: 8rem;
+    opacity: 0.04;
+    pointer-events: none;
+    line-height: 1;
   }
 
+  /* Emoji */
   .emoji-big {
-    font-size: 4rem;
+    font-size: 3.8rem;
     display: block;
     margin-bottom: 1.2rem;
-    animation: bounce 2s infinite ease-in-out;
+    animation: floatBob 3s infinite ease-in-out;
+  }
+  @keyframes floatBob {
+    0%, 100% { transform: translateY(0) rotate(-3deg); }
+    50%       { transform: translateY(-10px) rotate(3deg); }
   }
 
-  @keyframes bounce {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
-  }
-
-  h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: 2rem;
-    color: var(--dark);
-    margin-bottom: 0.8rem;
-    line-height: 1.3;
-  }
-
-  .subtitle {
-    font-size: 1rem;
-    color: #888;
+  /* Progress */
+  .progress {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
     margin-bottom: 2rem;
-    line-height: 1.6;
+    align-items: center;
+  }
+  .dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: #e8d5e8;
+    transition: all 0.4s ease;
+  }
+  .dot.active {
+    background: var(--rose);
+    width: 22px;
+    border-radius: 4px;
+  }
+
+  /* Typography */
+  h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--dark);
+    margin-bottom: 0.7rem;
+    line-height: 1.2;
+  }
+  .subtitle {
+    font-size: 0.95rem;
+    color: var(--muted);
+    margin-bottom: 2rem;
+    line-height: 1.75;
+  }
+  em.name {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    color: var(--rose);
+    font-size: 1.1em;
   }
 
   /* Buttons */
   .btn-group {
     display: flex;
-    gap: 1rem;
+    gap: 0.85rem;
     justify-content: center;
     flex-wrap: wrap;
     margin-top: 1.5rem;
   }
-
   .btn {
-    padding: 0.85rem 2rem;
+    padding: 0.85rem 1.8rem;
     border-radius: 50px;
     border: none;
-    font-size: 1rem;
-    font-family: 'Lato', sans-serif;
+    font-size: 0.95rem;
+    font-family: 'DM Sans', sans-serif;
     cursor: pointer;
-    transition: all 0.3s ease;
-    font-weight: 400;
-    letter-spacing: 0.5px;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    font-weight: 500;
+    letter-spacing: 0.3px;
   }
-
   .btn-yes {
-    background: linear-gradient(135deg, var(--rose), #c0355a);
+    background: linear-gradient(135deg, var(--rose), #b03060);
     color: white;
-    box-shadow: 0 4px 20px rgba(232, 71, 106, 0.4);
+    box-shadow: 0 6px 24px rgba(212, 67, 107, 0.38);
   }
-
   .btn-yes:hover {
-    transform: translateY(-3px) scale(1.05);
-    box-shadow: 0 8px 30px rgba(232, 71, 106, 0.5);
+    transform: translateY(-3px) scale(1.04);
+    box-shadow: 0 12px 36px rgba(212, 67, 107, 0.5);
   }
-
   .btn-no {
     background: white;
-    color: #bbb;
-    border: 2px solid #eee;
+    color: #ccc;
+    border: 2px solid #f0e8f0;
   }
-
   .btn-no:hover {
-    background: #fff0f0;
+    background: #fff5f8;
     color: var(--rose);
     border-color: var(--rose);
   }
-
-  /* Funny no button that runs away */
-  #no-btn-1 {
-    position: relative;
-    transition: all 0.2s;
+  .no-msg {
+    margin-top: 1rem;
+    color: var(--rose);
+    font-style: italic;
+    font-size: 0.88rem;
+    min-height: 1.4rem;
+    transition: all 0.3s;
   }
+
+  /* ── FORM STYLES ── */
+  .form-section {
+    text-align: left;
+    margin-bottom: 1.2rem;
+  }
+  .form-label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 0.5rem;
+  }
+  .form-label span { font-size: 1rem; margin-right: 0.3rem; }
+
+  /* Option chips */
+  .chip-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .chip {
+    padding: 0.55rem 1.1rem;
+    border-radius: 50px;
+    border: 2px solid #f0e8f0;
+    background: white;
+    font-size: 0.88rem;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    color: var(--text);
+    font-weight: 400;
+  }
+  .chip:hover {
+    border-color: var(--rose-light);
+    background: #fff5f8;
+    color: var(--rose);
+  }
+  .chip.selected {
+    background: linear-gradient(135deg, var(--rose), #b03060);
+    border-color: transparent;
+    color: white;
+    box-shadow: 0 3px 12px rgba(212, 67, 107, 0.3);
+    transform: scale(1.03);
+  }
+
+  /* Custom text input */
+  .text-input {
+    width: 100%;
+    padding: 0.75rem 1.1rem;
+    border: 2px solid #f0e8f0;
+    border-radius: 14px;
+    font-size: 0.95rem;
+    font-family: 'DM Sans', sans-serif;
+    outline: none;
+    transition: all 0.3s;
+    color: var(--text);
+    background: white;
+  }
+  .text-input:focus {
+    border-color: var(--rose-light);
+    box-shadow: 0 0 0 4px rgba(212, 67, 107, 0.08);
+  }
+  .text-input::placeholder { color: #d0bcd0; }
+  input[type="date"], input[type="time"] {
+    color: var(--text);
+    appearance: none;
+    -webkit-appearance: none;
+  }
+  input[type="date"]::-webkit-calendar-picker-indicator,
+  input[type="time"]::-webkit-calendar-picker-indicator {
+    opacity: 0.5;
+    cursor: pointer;
+    filter: invert(30%) sepia(60%) saturate(600%) hue-rotate(300deg);
+  }
+
+  /* Submit confirm btn */
+  .btn-confirm {
+    width: 100%;
+    padding: 1rem;
+    border-radius: 16px;
+    border: none;
+    background: linear-gradient(135deg, var(--rose), #b03060);
+    color: white;
+    font-size: 1rem;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+    margin-top: 0.5rem;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 6px 24px rgba(212, 67, 107, 0.35);
+  }
+  .btn-confirm:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 32px rgba(212, 67, 107, 0.5);
+  }
+  .btn-confirm:disabled {
+    background: #e0d0e0;
+    box-shadow: none;
+    transform: none;
+    cursor: not-allowed;
+  }
+
+  /* Divider */
+  .or-text {
+    text-align: center;
+    font-size: 0.75rem;
+    color: #ccc;
+    margin: 0.4rem 0;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  /* Summary card on success */
+  .summary-box {
+    background: linear-gradient(135deg, #fff5f8, #fff9f0);
+    border: 1px solid rgba(212, 67, 107, 0.15);
+    border-radius: 16px;
+    padding: 1.2rem 1.5rem;
+    margin: 1.5rem 0;
+    text-align: left;
+  }
+  .summary-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.7rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(212, 67, 107, 0.07);
+    font-size: 0.9rem;
+  }
+  .summary-row:last-child { border-bottom: none; }
+  .summary-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+  .summary-val { color: var(--dark); font-weight: 500; }
+  .summary-key { color: var(--muted); font-size: 0.78rem; }
+
+  /* Success page */
+  .success-bg { background: linear-gradient(160deg, #fce4ec 0%, #fffbf0 50%, #e8f5f0 100%); }
 
   /* Confetti */
   .confetti-piece {
     position: fixed;
-    width: 10px;
-    height: 10px;
-    border-radius: 2px;
     top: -10px;
-    animation: confettiFall 3s ease-in forwards;
-    z-index: 999;
+    animation: confettiFall 3.5s ease-in forwards;
+    z-index: 1000;
+    pointer-events: none;
   }
-
   @keyframes confettiFall {
     to { transform: translateY(110vh) rotate(720deg); opacity: 0; }
   }
 
-  /* Progress dots */
-  .progress {
-    display: flex;
-    gap: 8px;
-    justify-content: center;
-    margin-bottom: 2rem;
-  }
-
-  .dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    background: #e0d5e0;
-    transition: background 0.4s;
-  }
-
-  .dot.active { background: var(--rose); }
-
-  /* Funny text animations */
-  .wiggle {
-    display: inline-block;
-    animation: wiggle 0.5s infinite;
-  }
-  @keyframes wiggle {
-    0%, 100% { transform: rotate(0deg); }
-    25% { transform: rotate(-5deg); }
-    75% { transform: rotate(5deg); }
-  }
-
-  /* Final success page */
-  .success-bg {
-    background: linear-gradient(135deg, #fce4ec, #fff9c4, #e8f5e9);
-    background-size: 400%;
-    animation: gradientShift 6s infinite ease;
-  }
-
-  @keyframes gradientShift {
-    0%, 100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-  }
-
-  /* Form hidden */
+  /* Hidden form */
   .hidden-form { display: none; }
 
-  /* Input styles */
-  input[type="text"] {
-    width: 100%;
-    padding: 0.8rem 1.2rem;
-    border: 2px solid #eee;
-    border-radius: 12px;
-    font-size: 1rem;
-    font-family: 'Lato', sans-serif;
-    margin-bottom: 1rem;
-    outline: none;
-    transition: border 0.3s;
-  }
-
-  input[type="text"]:focus { border-color: var(--rose); }
-
   @media (max-width: 480px) {
-    h1 { font-size: 1.6rem; }
-    .card { padding: 2rem 1.5rem; }
-    .btn { padding: 0.75rem 1.5rem; }
+    h1 { font-size: 1.7rem; }
+    .card { padding: 2rem 1.4rem 1.8rem; }
+    .chip { font-size: 0.82rem; padding: 0.5rem 0.9rem; }
   }
 </style>
 </head>
 <body>
 
-<!-- Floating hearts -->
 <div class="hearts-bg" id="heartsBg"></div>
 
-<!-- PAGE 1: Introduction -->
+<!-- ─── PAGE 1: Hello ─── -->
 <div class="page active" id="page1">
   <div class="progress">
     <div class="dot active"></div>
     <div class="dot"></div>
     <div class="dot"></div>
     <div class="dot"></div>
+    <div class="dot"></div>
   </div>
   <div class="card">
+    <div class="card-watermark">💌</div>
     <span class="emoji-big">💌</span>
     <h1>Hello, Madam!</h1>
     <p class="subtitle">
-      <em style="font-family:'Playfair Display',serif; color:var(--rose);">Harsh</em> this side 👋<br><br>
+      <em class="name">Harsh</em> this side 👋<br>
       I have a few very important questions for you.<br>
       Can we move forward? 🥺
     </p>
     <div class="btn-group">
       <button class="btn btn-yes" onclick="goTo(2)">Yes, of course! 💖</button>
-      <button class="btn btn-no" id="no-btn-1" onclick="noJoke1()">No</button>
+      <button class="btn btn-no" id="no-btn-1" onclick="noJoke(1)">No</button>
     </div>
-    <p id="no-msg-1" style="margin-top:1rem; color:#e8476a; font-style:italic; font-size:0.9rem; display:none;"></p>
+    <p class="no-msg" id="no-msg-1"></p>
   </div>
 </div>
 
-<!-- PAGE 2: Will you go on a date? -->
+<!-- ─── PAGE 2: Will you go on a date? ─── -->
 <div class="page" id="page2">
   <div class="progress">
     <div class="dot"></div>
     <div class="dot active"></div>
     <div class="dot"></div>
     <div class="dot"></div>
+    <div class="dot"></div>
   </div>
   <div class="card">
+    <div class="card-watermark">🌹</div>
     <span class="emoji-big">🌹</span>
     <h1>Will you go on a date with me?</h1>
     <p class="subtitle">
@@ -301,72 +429,149 @@
     </p>
     <div class="btn-group">
       <button class="btn btn-yes" onclick="goTo(3)">Yes! 🥰</button>
-      <button class="btn btn-no" id="no-btn-2" onclick="noJoke2()">Hmm, No</button>
+      <button class="btn btn-no" id="no-btn-2" onclick="noJoke(2)">Hmm, No</button>
     </div>
-    <p id="no-msg-2" style="margin-top:1rem; color:#e8476a; font-style:italic; font-size:0.9rem; display:none;"></p>
+    <p class="no-msg" id="no-msg-2"></p>
   </div>
 </div>
 
-<!-- PAGE 3: Today at 7PM Sector 76 -->
+<!-- ─── PAGE 3: WHEN? ─── -->
 <div class="page" id="page3">
   <div class="progress">
     <div class="dot"></div>
     <div class="dot"></div>
     <div class="dot active"></div>
     <div class="dot"></div>
+    <div class="dot"></div>
   </div>
   <div class="card">
-    <span class="emoji-big">📍</span>
-    <h1>Today. 7 PM.<br>Sector 76. 🌆</h1>
-    <p class="subtitle">
-      I've already planned everything in my head.<br>
-      Now I just need <em style="font-family:'Playfair Display',serif; color:var(--rose);">you</em> to show up. 🙏
-    </p>
-    <div class="btn-group">
-      <button class="btn btn-yes" onclick="goTo(4)">I'll be there! 🫶</button>
-      <button class="btn btn-no" id="no-btn-3" onclick="noJoke3()">Maybe No</button>
+    <div class="card-watermark">📅</div>
+    <span class="emoji-big">📅</span>
+    <h1>Okay great! Now...<br><em style="font-family:'Cormorant Garamond',serif; color:var(--rose);">when</em> works for you?</h1>
+    <p class="subtitle">Type in what works for you. Your schedule, your rules. 😏</p>
+
+    <div class="form-section">
+      <label class="form-label"><span>🗓️</span>Which date?</label>
+      <input class="text-input" id="day-input" type="date" oninput="checkPage3()" style="cursor:pointer;">
+      <div class="or-text" style="margin-top:0.3rem;">not sure yet? just type something like "this saturday" below</div>
+      <input class="text-input" id="day-text" type="text" placeholder='or type freely: "this Saturday", "next week"...' oninput="checkPage3()" style="margin-top:0.5rem;">
     </div>
-    <p id="no-msg-3" style="margin-top:1rem; color:#e8476a; font-style:italic; font-size:0.9rem; display:none;"></p>
+
+    <div class="form-section" style="margin-top:1.2rem;">
+      <label class="form-label"><span>⏰</span>What time?</label>
+      <input class="text-input" id="time-input" type="time" oninput="checkPage3()" style="cursor:pointer;">
+      <div class="or-text" style="margin-top:0.3rem;">or describe it your way</div>
+      <input class="text-input" id="time-text" type="text" placeholder='e.g. "around 7", "after dinner", "you decide"...' oninput="checkPage3()" style="margin-top:0.5rem;">
+    </div>
+
+    <button class="btn-confirm" id="btn-when" disabled onclick="goTo(4)">Next →</button>
+    <div class="btn-group" style="margin-top:0.8rem;">
+      <button class="btn btn-no" id="no-btn-3" onclick="noJoke(3)">I don't do dates 🙃</button>
+    </div>
+    <p class="no-msg" id="no-msg-3"></p>
   </div>
 </div>
 
-<!-- PAGE 4: Can I hold your hand? -->
+<!-- ─── PAGE 4: WHERE? ─── -->
 <div class="page" id="page4">
   <div class="progress">
     <div class="dot"></div>
     <div class="dot"></div>
     <div class="dot"></div>
     <div class="dot active"></div>
+    <div class="dot"></div>
   </div>
   <div class="card">
-    <span class="emoji-big">🤝</span>
-    <h1>One last question...</h1>
-    <p class="subtitle">
-      Okay so um... hypothetically speaking...<br>
-      if our hands were just <em>casually</em> near each other...<br>
-      could they maybe... hold each other? 🥺<br><br>
-      <small style="color:#bbb;">(asking for a friend named Harsh)</small>
-    </p>
-    <div class="btn-group">
-      <button class="btn btn-yes" onclick="submitYes()">Okay fine, yes 🤭</button>
-      <button class="btn btn-no" id="no-btn-4" onclick="noJoke4()">Never! 🙈</button>
+    <div class="card-watermark">📍</div>
+    <span class="emoji-big">📍</span>
+    <h1><em style="font-family:'Cormorant Garamond',serif; color:var(--rose);">Where</em> should we go?</h1>
+    <p class="subtitle">Choose your vibe. I'll make it happen. No pressure... much. 😅</p>
+
+    <div class="form-section">
+      <label class="form-label"><span>🎯</span>Type of date</label>
+      <div class="chip-group" id="type-chips">
+        <div class="chip" onclick="selectChip(this,'type')">Café ☕</div>
+        <div class="chip" onclick="selectChip(this,'type')">Dinner 🍽️</div>
+        <div class="chip" onclick="selectChip(this,'type')">Walk + Talk 🚶</div>
+        <div class="chip" onclick="selectChip(this,'type')">Movie 🎬</div>
+        <div class="chip" onclick="selectChip(this,'type')">Ice Cream 🍦</div>
+        <div class="chip" onclick="selectChip(this,'type')">You plan it 🎁</div>
+      </div>
     </div>
-    <p id="no-msg-4" style="margin-top:1rem; color:#e8476a; font-style:italic; font-size:0.9rem; display:none;"></p>
+
+    <div class="form-section" style="margin-top:1.2rem;">
+      <label class="form-label"><span>🗺️</span>Any area in mind?</label>
+      <input class="text-input" id="location-input" type="text" placeholder="e.g. Sector 29, Cyber Hub, anywhere..." oninput="checkPage4()">
+      <div class="or-text">or leave blank & I'll decide 😎</div>
+    </div>
+
+    <button class="btn-confirm" id="btn-where" disabled onclick="goTo(5)">Next →</button>
+    <div class="btn-group" style="margin-top:0.8rem;">
+      <button class="btn btn-no" id="no-btn-4" onclick="noJoke(4)">Nope, not interested</button>
+    </div>
+    <p class="no-msg" id="no-msg-4"></p>
   </div>
 </div>
 
-<!-- PAGE 5: SUCCESS -->
-<div class="page success-bg" id="page5">
-  <div class="card" style="border:2px solid rgba(232,71,106,0.2);">
-    <span class="emoji-big" style="animation:none; font-size:5rem;">🎉</span>
-    <h1 style="font-size:2.2rem;">She said YES!!! 🥳</h1>
-    <p class="subtitle" style="font-size:1.1rem;">
-      Today, 7 PM, Sector 76.<br>
-      <strong style="color:var(--rose);">Don't be late, Harsh. 😏</strong><br><br>
-      See you soon! 🌹
+<!-- ─── PAGE 5: VIBE CHECK ─── -->
+<div class="page" id="page5">
+  <div class="progress">
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot active"></div>
+  </div>
+  <div class="card">
+    <div class="card-watermark">✨</div>
+    <span class="emoji-big">✨</span>
+    <h1>Last thing, I promise...</h1>
+    <p class="subtitle">Just so I can make this <em class="name">perfect</em> for you 🥺</p>
+
+    <div class="form-section">
+      <label class="form-label"><span>🎭</span>The vibe should be...</label>
+      <div class="chip-group" id="vibe-chips">
+        <div class="chip" onclick="selectChip(this,'vibe')">Chill & Casual 😌</div>
+        <div class="chip" onclick="selectChip(this,'vibe')">Fun & Silly 🤪</div>
+        <div class="chip" onclick="selectChip(this,'vibe')">Romantic 🌹</div>
+        <div class="chip" onclick="selectChip(this,'vibe')">Adventurous 🌟</div>
+        <div class="chip" onclick="selectChip(this,'vibe')">Whatever you plan</div>
+      </div>
+    </div>
+
+    <div class="form-section" style="margin-top:1.2rem;">
+      <label class="form-label"><span>💬</span>Anything else I should know?</label>
+      <input class="text-input" id="extra-input" type="text" placeholder="Allergies, pet peeves, demands... 😂" oninput="">
+    </div>
+
+    <button class="btn-confirm" id="btn-vibe" disabled onclick="submitAll()">
+      Okay, I'm in! 🎉
+    </button>
+    <div class="btn-group" style="margin-top:0.8rem;">
+      <button class="btn btn-no" id="no-btn-5" onclick="noJoke(5)">Actually never mind 😤</button>
+    </div>
+    <p class="no-msg" id="no-msg-5"></p>
+  </div>
+</div>
+
+<!-- ─── PAGE 6: SUCCESS ─── -->
+<div class="page success-bg" id="page6">
+  <div class="card" style="border:1.5px solid rgba(212,67,107,0.2);">
+    <div class="card-watermark">🎉</div>
+    <span class="emoji-big" style="animation:none; font-size:4.5rem;">🎊</span>
+    <h1 style="font-size:2.1rem;">IT'S A DATE!!! 🥳</h1>
+    <p class="subtitle" style="margin-bottom:0.5rem;">Here's what we've locked in —</p>
+
+    <div class="summary-box" id="summary-box">
+      <!-- filled by JS -->
+    </div>
+
+    <p class="subtitle" style="font-size:0.88rem; margin-top:0.5rem;">
+      <strong style="color:var(--rose);">Harsh is already panicking picking an outfit.</strong><br>
+      He'll text you soon. 😌
     </p>
-    <p style="color:#bbb; font-size:0.8rem; margin-top:1.5rem;">
-      (Notification sent to Harsh — he's probably jumping right now 💃)
+    <p style="color:#ccc; font-size:0.78rem; margin-top:1rem;">
+      (Notification sent to Harsh — he's probably doing a happy dance right now 💃)
     </p>
   </div>
 </div>
@@ -374,88 +579,137 @@
 <!-- Hidden Formspree form -->
 <form id="notify-form" action="https://formspree.io/f/mkovpokp" method="POST" class="hidden-form">
   <input type="text" name="message" id="form-message">
-  <input type="text" name="_subject" value="💌 She Said YES!!!">
+  <input type="text" name="_subject" value="💌 She Said YES — Date Details Inside!">
 </form>
 
 <script>
-  // Generate floating hearts
+  // ── Floating hearts ──
   const heartsBg = document.getElementById('heartsBg');
-  const emojis = ['❤️','💕','💖','💗','🌹','✨','💝','💞'];
-  for (let i = 0; i < 20; i++) {
+  const emojis = ['❤️','💕','💖','🌸','✨','💝','🌹','💞','🫧'];
+  for (let i = 0; i < 18; i++) {
     const h = document.createElement('div');
     h.className = 'heart-float';
     h.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-    h.style.left = Math.random() * 100 + 'vw';
-    h.style.animationDelay = Math.random() * 8 + 's';
-    h.style.animationDuration = (6 + Math.random() * 6) + 's';
-    h.style.fontSize = (0.8 + Math.random() * 1.5) + 'rem';
+    h.style.cssText = `left:${Math.random()*100}vw; animation-delay:${Math.random()*10}s; animation-duration:${8+Math.random()*7}s; font-size:${0.7+Math.random()*1.3}rem;`;
     heartsBg.appendChild(h);
   }
 
+  // ── State ──
+  const answers = { day:'', time:'', type:'', location:'', vibe:'', extra:'' };
+
+  // ── Navigation ──
   function goTo(page) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.getElementById('page' + page).classList.add('active');
     window.scrollTo(0, 0);
   }
 
-  const noJokes = [
-    ["Excuse me?? The 'No' button is broken 😤", "Try clicking Yes instead!", "Did you mean YES? 🥺", "My 'No' button doesn't work here 🙈", "That button is just for decoration 😂"],
-    ["Wrong button, try the other one 😭", "No? Your finger slipped clearly 😂", "Did autocorrect make you press No?", "I'm going to pretend that didn't happen 🙉", "The universe says YES btw 🌟"],
-    ["Your GPS is already set to Sector 76 👀", "Too late, I already told my mom 😂", "The chai is already ordered... 🫖", "My heart already said yes for you 💔", "The 7PM slot is booked, sorry 📅"],
-    ["The hand is literally right here 🖐️", "My hand is now sad 😢", "Even my palm lines say yes 🔮", "I'll teach you palmistry so it counts 😂", "What if it was just a high-five? 🙈"],
-  ];
-
-  let noCounts = [0, 0, 0, 0];
-
-  function noJoke(pageNum) {
-    const jokes = noJokes[pageNum - 1];
-    const idx = Math.min(noCounts[pageNum - 1], jokes.length - 1);
-    const msg = document.getElementById('no-msg-' + pageNum);
-    msg.textContent = jokes[idx];
-    msg.style.display = 'block';
-    noCounts[pageNum - 1]++;
-
-    // Make the No button run away on desktop
-    const btn = document.getElementById('no-btn-' + pageNum);
-    const r = () => Math.random() * 200 - 100;
-    btn.style.transform = `translate(${r()}px, ${r()}px)`;
-    setTimeout(() => btn.style.transform = '', 1000);
+  // ── Chip select ──
+  function selectChip(el, group) {
+    const parent = el.closest('.chip-group');
+    parent.querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    answers[group] = el.textContent.trim();
+    checkPage3();
+    checkPage4();
+    checkPage5();
   }
 
-  function noJoke1() { noJoke(1); }
-  function noJoke2() { noJoke(2); }
-  function noJoke3() { noJoke(3); }
-  function noJoke4() { noJoke(4); }
+  function checkPage3() {
+    const dayDate = document.getElementById('day-input').value;
+    const dayText = document.getElementById('day-text').value.trim();
+    const timeDate = document.getElementById('time-input').value;
+    const timeText = document.getElementById('time-text').value.trim();
+    const dayVal  = dayDate || dayText;
+    const timeVal = timeDate || timeText;
+    if (dayDate) {
+      const d = new Date(dayDate + 'T00:00:00');
+      answers.day = d.toLocaleDateString('en-IN', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+    } else if (dayText) {
+      answers.day = dayText;
+    }
+    if (timeDate) {
+      const [h, m] = timeDate.split(':');
+      const hr = parseInt(h), ampm = hr >= 12 ? 'PM' : 'AM';
+      answers.time = `${hr % 12 || 12}:${m} ${ampm}`;
+    } else if (timeText) {
+      answers.time = timeText;
+    }
+    document.getElementById('btn-when').disabled = !(dayVal && timeVal);
+  }
+  function checkPage4() {
+    const ok = answers.type;
+    document.getElementById('btn-where').disabled = !ok;
+    if (ok) answers.location = document.getElementById('location-input').value.trim() || 'Wherever you decide 😎';
+  }
+  function checkPage5() {
+    const ok = answers.vibe;
+    document.getElementById('btn-vibe').disabled = !ok;
+  }
 
-  function submitYes() {
-    // Send notification via Formspree
+  // ── No jokes ──
+  const noJokes = [
+    ["Excuse me?? The 'No' button is broken 😤", "Try clicking Yes instead!", "Did you mean YES? 🥺", "My 'No' button doesn't work here 🙈", "That button is just for decoration 😂"],
+    ["Wrong button, try the other one 😭", "No? Your finger clearly slipped 😂", "Did autocorrect press No?", "I'll pretend that didn't happen 🙉", "The universe says YES btw 🌟"],
+    ["Too late, I already told my mom 😂", "The calendar is already blocked 👀", "My heart already RSVP'd for you 💔", "Even your horoscope says yes ♐", "You can't cancel what hasn't been booked 📅"],
+    ["The café is already disappointed 😢", "Your GPS is already plotting the route 👀", "We can stay in Gurgaon, I don't mind 🏙️", "I'll literally go wherever you say 🥺", "Fine, I'll close my eyes and point on a map 🗺️"],
+    ["After all that?? 😭", "You've come so far to back out now?!", "Your vibe was literally 'romantic'!! 🌹", "I saw you smile on page 2. Don't lie. 😏", "Okay fine I'll beg. Please? 🙏"],
+  ];
+  const noCounts = [0,0,0,0,0];
+
+  function noJoke(n) {
+    const jokes = noJokes[n-1];
+    const idx = Math.min(noCounts[n-1], jokes.length-1);
+    document.getElementById('no-msg-'+n).textContent = jokes[idx];
+    noCounts[n-1]++;
+    const btn = document.getElementById('no-btn-'+n);
+    const r = () => (Math.random()-0.5)*160;
+    btn.style.transform = `translate(${r()}px,${r()}px) rotate(${r()*0.1}deg)`;
+    setTimeout(() => btn.style.transform='', 800);
+  }
+
+  // ── Submit ──
+  function submitAll() {
+    answers.extra = document.getElementById('extra-input').value.trim() || 'Nothing special (she trusts me 🥹)';
+    answers.location = document.getElementById('location-input').value.trim() || 'Wherever you decide 😎';
+
+    // Populate summary
+    const rows = [
+      { icon: '🗓️', key: 'Day',      val: answers.day  },
+      { icon: '⏰', key: 'Time',     val: answers.time },
+      { icon: '🎯', key: 'Date Type', val: answers.type },
+      { icon: '📍', key: 'Location', val: answers.location },
+      { icon: '🎭', key: 'Vibe',     val: answers.vibe },
+      { icon: '💬', key: 'Notes',    val: answers.extra },
+    ];
+    document.getElementById('summary-box').innerHTML = rows.map(r => `
+      <div class="summary-row">
+        <span class="summary-icon">${r.icon}</span>
+        <div>
+          <div class="summary-key">${r.key}</div>
+          <div class="summary-val">${r.val}</div>
+        </div>
+      </div>`).join('');
+
+    // Send notification
+    const msg = `💌 SHE SAID YES TO A DATE!\n\n📅 Day: ${answers.day}\n⏰ Time: ${answers.time}\n🎯 Type: ${answers.type}\n📍 Location: ${answers.location}\n🎭 Vibe: ${answers.vibe}\n💬 Notes: ${answers.extra}\n\nGO GO GO! 🎉`;
+    document.getElementById('form-message').value = msg;
     const form = document.getElementById('notify-form');
-    document.getElementById('form-message').value = '💌 SHE SAID YES TO EVERYTHING! Date confirmed: Today 7PM, Sector 76. She also said yes to holding hands! Go go go! 🎉';
-    
-    fetch(form.action, {
-      method: 'POST',
-      body: new FormData(form),
-      headers: { 'Accept': 'application/json' }
-    }).catch(() => {});  // silently succeed
+    fetch(form.action, { method:'POST', body: new FormData(form), headers:{'Accept':'application/json'} }).catch(()=>{});
 
     confetti();
-    goTo(5);
+    goTo(6);
   }
 
   function confetti() {
-    const colors = ['#e8476a','#c9a84c','#7c4dff','#00bcd4','#ff5722','#4caf50'];
-    for (let i = 0; i < 80; i++) {
+    const colors = ['#d4436b','#c9935a','#7c4dff','#00bcd4','#ff9800','#4caf50','#e91e63'];
+    for (let i = 0; i < 100; i++) {
       const c = document.createElement('div');
       c.className = 'confetti-piece';
-      c.style.left = Math.random() * 100 + 'vw';
-      c.style.background = colors[Math.floor(Math.random() * colors.length)];
-      c.style.width = (8 + Math.random() * 8) + 'px';
-      c.style.height = (8 + Math.random() * 8) + 'px';
-      c.style.animationDuration = (2 + Math.random() * 2) + 's';
-      c.style.animationDelay = Math.random() * 1 + 's';
-      c.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+      const size = 6 + Math.random()*10;
+      c.style.cssText = `left:${Math.random()*100}vw; width:${size}px; height:${size}px; background:${colors[Math.floor(Math.random()*colors.length)]}; animation-duration:${2+Math.random()*2.5}s; animation-delay:${Math.random()*0.8}s; border-radius:${Math.random()>0.5?'50%':'3px'};`;
       document.body.appendChild(c);
-      setTimeout(() => c.remove(), 5000);
+      setTimeout(()=>c.remove(), 5000);
     }
   }
 </script>
