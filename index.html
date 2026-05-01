@@ -3,17 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>A Very Important Message 💌</title>
+<title>A Very Important Message 🌸</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --rose: #d4436b;
-    --rose-light: #f06292;
+    --rose: #c0436b;
+    --rose-light: #e8799a;
     --blush: #fce4ec;
-    --cream: #fffaf6;
+    --cream: #fffaf5;
     --gold: #c9935a;
+    --green: #7aab6e;
+    --green-light: #a8c9a0;
     --dark: #1e0e1f;
     --text: #3d1a3e;
     --muted: #9e7b9f;
@@ -28,33 +30,22 @@
     overflow-x: hidden;
   }
 
-  /* Animated grain overlay */
-  body::after {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 9999;
-    opacity: 0.4;
-  }
-
-  /* Floating hearts */
-  .hearts-bg {
+  /* Floating flowers */
+  .flowers-bg {
     position: fixed;
     inset: 0;
     pointer-events: none;
     z-index: 0;
     overflow: hidden;
   }
-  .heart-float {
+  .flower-float {
     position: absolute;
     opacity: 0;
-    animation: floatUp 10s infinite ease-in;
+    animation: floatUp 12s infinite ease-in;
   }
   @keyframes floatUp {
     0%   { opacity: 0; transform: translateY(110vh) rotate(0deg) scale(0.8); }
-    10%  { opacity: 0.35; }
+    10%  { opacity: 0.4; }
     90%  { opacity: 0.15; }
     100% { opacity: 0; transform: translateY(-10vh) rotate(360deg) scale(1.2); }
   }
@@ -85,13 +76,13 @@
     background: var(--card-bg);
     border-radius: 28px;
     padding: 3rem 2.5rem 2.5rem;
-    max-width: 500px;
+    max-width: 520px;
     width: 100%;
     box-shadow:
-      0 30px 80px rgba(212, 67, 107, 0.12),
-      0 8px 30px rgba(0,0,0,0.06),
+      0 30px 80px rgba(192, 67, 107, 0.10),
+      0 8px 30px rgba(0,0,0,0.05),
       inset 0 1px 0 rgba(255,255,255,0.9);
-    border: 1px solid rgba(212, 67, 107, 0.08);
+    border: 1px solid rgba(192, 67, 107, 0.09);
     position: relative;
     overflow: hidden;
   }
@@ -100,13 +91,23 @@
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 3px;
-    background: linear-gradient(90deg, var(--rose), var(--gold), var(--rose-light), var(--rose));
+    background: linear-gradient(90deg, var(--rose), var(--gold), var(--green), var(--rose-light), var(--rose));
     background-size: 300%;
     animation: shimmer 4s infinite linear;
   }
   @keyframes shimmer {
     0%   { background-position: 0%; }
     100% { background-position: 300%; }
+  }
+
+  /* floral corner decorations */
+  .card::after {
+    content: '🌸';
+    position: absolute;
+    top: 12px; right: 16px;
+    font-size: 1.3rem;
+    opacity: 0.18;
+    pointer-events: none;
   }
   .card-watermark {
     position: absolute;
@@ -192,13 +193,13 @@
     letter-spacing: 0.3px;
   }
   .btn-yes {
-    background: linear-gradient(135deg, var(--rose), #b03060);
+    background: linear-gradient(135deg, var(--rose), #8f2a50);
     color: white;
-    box-shadow: 0 6px 24px rgba(212, 67, 107, 0.38);
+    box-shadow: 0 6px 24px rgba(192, 67, 107, 0.35);
   }
   .btn-yes:hover {
     transform: translateY(-3px) scale(1.04);
-    box-shadow: 0 12px 36px rgba(212, 67, 107, 0.5);
+    box-shadow: 0 12px 36px rgba(192, 67, 107, 0.48);
   }
   .btn-no {
     background: white;
@@ -219,7 +220,37 @@
     transition: all 0.3s;
   }
 
-  /* ── FORM STYLES ── */
+  /* Mode selector (virtual/real) */
+  .mode-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.8rem;
+    margin: 1rem 0 1.5rem;
+  }
+  .mode-card {
+    border: 2px solid #f0e8f0;
+    border-radius: 18px;
+    padding: 1.1rem 0.8rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    background: white;
+  }
+  .mode-card:hover {
+    border-color: var(--rose-light);
+    background: #fff8fa;
+  }
+  .mode-card.selected {
+    border-color: var(--rose);
+    background: linear-gradient(135deg, #fff0f5, #fff8f0);
+    box-shadow: 0 4px 16px rgba(192, 67, 107, 0.15);
+  }
+  .mode-card .mc-icon { font-size: 2rem; margin-bottom: 0.4rem; display: block; }
+  .mode-card .mc-title { font-size: 0.92rem; font-weight: 500; color: var(--dark); }
+  .mode-card .mc-desc { font-size: 0.75rem; color: var(--muted); margin-top: 0.25rem; line-height: 1.4; }
+  .mode-card.selected .mc-title { color: var(--rose); }
+
+  /* FORM STYLES */
   .form-section {
     text-align: left;
     margin-bottom: 1.2rem;
@@ -259,10 +290,10 @@
     color: var(--rose);
   }
   .chip.selected {
-    background: linear-gradient(135deg, var(--rose), #b03060);
+    background: linear-gradient(135deg, var(--rose), #8f2a50);
     border-color: transparent;
     color: white;
-    box-shadow: 0 3px 12px rgba(212, 67, 107, 0.3);
+    box-shadow: 0 3px 12px rgba(192, 67, 107, 0.28);
     transform: scale(1.03);
   }
 
@@ -281,7 +312,7 @@
   }
   .text-input:focus {
     border-color: var(--rose-light);
-    box-shadow: 0 0 0 4px rgba(212, 67, 107, 0.08);
+    box-shadow: 0 0 0 4px rgba(192, 67, 107, 0.08);
   }
   .text-input::placeholder { color: #d0bcd0; }
   input[type="date"], input[type="time"] {
@@ -296,13 +327,31 @@
     filter: invert(30%) sepia(60%) saturate(600%) hue-rotate(300deg);
   }
 
-  /* Submit confirm btn */
+  /* Fun time chips */
+  .time-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.5rem; }
+  .time-chip {
+    padding: 0.4rem 0.9rem;
+    border-radius: 50px;
+    border: 1.5px solid #f0e8f0;
+    background: white;
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition: all 0.25s;
+    color: var(--muted);
+  }
+  .time-chip:hover, .time-chip.selected {
+    border-color: var(--rose-light);
+    background: #fff5f8;
+    color: var(--rose);
+  }
+
+  /* Confirm btn */
   .btn-confirm {
     width: 100%;
     padding: 1rem;
     border-radius: 16px;
     border: none;
-    background: linear-gradient(135deg, var(--rose), #b03060);
+    background: linear-gradient(135deg, var(--rose), #8f2a50);
     color: white;
     font-size: 1rem;
     font-family: 'DM Sans', sans-serif;
@@ -310,17 +359,18 @@
     cursor: pointer;
     margin-top: 0.5rem;
     transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-    box-shadow: 0 6px 24px rgba(212, 67, 107, 0.35);
+    box-shadow: 0 6px 24px rgba(192, 67, 107, 0.32);
   }
   .btn-confirm:hover {
     transform: translateY(-2px);
-    box-shadow: 0 10px 32px rgba(212, 67, 107, 0.5);
+    box-shadow: 0 10px 32px rgba(192, 67, 107, 0.46);
   }
   .btn-confirm:disabled {
-    background: #e0d0e0;
+    background: #e8dcea;
     box-shadow: none;
     transform: none;
     cursor: not-allowed;
+    color: #bbb;
   }
 
   /* Divider */
@@ -333,10 +383,23 @@
     text-transform: uppercase;
   }
 
-  /* Summary card on success */
+  /* Info note box */
+  .info-note {
+    background: linear-gradient(135deg, #fff0f5, #fff8f0);
+    border: 1px dashed rgba(192, 67, 107, 0.25);
+    border-radius: 14px;
+    padding: 0.9rem 1.1rem;
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.6;
+    margin: 1rem 0;
+    text-align: left;
+  }
+
+  /* Summary box */
   .summary-box {
     background: linear-gradient(135deg, #fff5f8, #fff9f0);
-    border: 1px solid rgba(212, 67, 107, 0.15);
+    border: 1px solid rgba(192, 67, 107, 0.15);
     border-radius: 16px;
     padding: 1.2rem 1.5rem;
     margin: 1.5rem 0;
@@ -347,7 +410,7 @@
     align-items: flex-start;
     gap: 0.7rem;
     padding: 0.5rem 0;
-    border-bottom: 1px solid rgba(212, 67, 107, 0.07);
+    border-bottom: 1px solid rgba(192, 67, 107, 0.07);
     font-size: 0.9rem;
   }
   .summary-row:last-child { border-bottom: none; }
@@ -355,8 +418,32 @@
   .summary-val { color: var(--dark); font-weight: 500; }
   .summary-key { color: var(--muted); font-size: 0.78rem; }
 
+  /* Virtual badge */
+  .virtual-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #e8f5e9, #f0f4ff);
+    border: 1px solid rgba(122, 171, 110, 0.35);
+    color: #4a7a40;
+    font-size: 0.78rem;
+    padding: 0.3rem 0.8rem;
+    border-radius: 50px;
+    font-weight: 500;
+    margin-bottom: 0.8rem;
+  }
+  .real-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #fff0f5, #fff8f0);
+    border: 1px solid rgba(192, 67, 107, 0.3);
+    color: var(--rose);
+    font-size: 0.78rem;
+    padding: 0.3rem 0.8rem;
+    border-radius: 50px;
+    font-weight: 500;
+    margin-bottom: 0.8rem;
+  }
+
   /* Success page */
-  .success-bg { background: linear-gradient(160deg, #fce4ec 0%, #fffbf0 50%, #e8f5f0 100%); }
+  .success-bg { background: linear-gradient(160deg, #fce4ec 0%, #fffbf0 50%, #e8f5e8 100%); }
 
   /* Confetti */
   .confetti-piece {
@@ -370,21 +457,22 @@
     to { transform: translateY(110vh) rotate(720deg); opacity: 0; }
   }
 
-  /* Hidden form */
   .hidden-form { display: none; }
 
   @media (max-width: 480px) {
     h1 { font-size: 1.7rem; }
     .card { padding: 2rem 1.4rem 1.8rem; }
     .chip { font-size: 0.82rem; padding: 0.5rem 0.9rem; }
+    .mode-cards { gap: 0.5rem; }
+    .mode-card { padding: 0.85rem 0.5rem; }
   }
 </style>
 </head>
 <body>
 
-<div class="hearts-bg" id="heartsBg"></div>
+<div class="flowers-bg" id="flowersBg"></div>
 
-<!-- ─── PAGE 1: Hello ─── -->
+<!-- PAGE 1: Hello -->
 <div class="page active" id="page1">
   <div class="progress">
     <div class="dot active"></div>
@@ -392,10 +480,11 @@
     <div class="dot"></div>
     <div class="dot"></div>
     <div class="dot"></div>
+    <div class="dot"></div>
   </div>
   <div class="card">
-    <div class="card-watermark">💌</div>
-    <span class="emoji-big">💌</span>
+    <div class="card-watermark">🌸</div>
+    <span class="emoji-big">🌸</span>
     <h1>Hello, Madam!</h1>
     <p class="subtitle">
       <em class="name">Harsh</em> this side 👋<br>
@@ -410,7 +499,7 @@
   </div>
 </div>
 
-<!-- ─── PAGE 2: Will you go on a date? ─── -->
+<!-- PAGE 2: Date mode -->
 <div class="page" id="page2">
   <div class="progress">
     <div class="dot"></div>
@@ -418,24 +507,37 @@
     <div class="dot"></div>
     <div class="dot"></div>
     <div class="dot"></div>
+    <div class="dot"></div>
   </div>
   <div class="card">
-    <div class="card-watermark">🌹</div>
-    <span class="emoji-big">🌹</span>
+    <div class="card-watermark">🌺</div>
+    <span class="emoji-big">🌺</span>
     <h1>Will you go on a date with me?</h1>
     <p class="subtitle">
-      I promise I'll be charming...<br>
-      or at least I'll try very hard. 😅
+      Little confession... I recently had surgery so I can't go out just yet. 🏥<br>
+      But that won't stop me from taking you on a date! 😏
     </p>
-    <div class="btn-group">
-      <button class="btn btn-yes" onclick="goTo(3)">Yes! 🥰</button>
+
+    <div class="mode-cards" id="mode-cards">
+      <div class="mode-card" onclick="selectMode('virtual', this)">
+        <span class="mc-icon">💻</span>
+        <div class="mc-title">Virtual Date 🌐</div>
+        <div class="mc-desc">Movie, games, chai on call — right now works!</div>
+      </div>
+      <div class="mode-card" onclick="selectMode('real', this)">
+        <span class="mc-icon">🌹</span>
+        <div class="mc-title">Real Date 🎉</div>
+        <div class="mc-desc">When I'm all healed — worth the wait 😉</div>
+      </div>
+    </div>
+    <p class="no-msg" id="no-msg-2" style="margin-bottom:0.5rem;"></p>
+    <div class="btn-group" style="margin-top:0;">
       <button class="btn btn-no" id="no-btn-2" onclick="noJoke(2)">Hmm, No</button>
     </div>
-    <p class="no-msg" id="no-msg-2"></p>
   </div>
 </div>
 
-<!-- ─── PAGE 3: WHEN? ─── -->
+<!-- PAGE 3: WHEN -->
 <div class="page" id="page3">
   <div class="progress">
     <div class="dot"></div>
@@ -443,28 +545,43 @@
     <div class="dot active"></div>
     <div class="dot"></div>
     <div class="dot"></div>
+    <div class="dot"></div>
   </div>
   <div class="card">
     <div class="card-watermark">📅</div>
     <span class="emoji-big">📅</span>
     <h1>Okay great! Now...<br><em style="font-family:'Cormorant Garamond',serif; color:var(--rose);">when</em> works for you?</h1>
-    <p class="subtitle">Type in what works for you. Your schedule, your rules. 😏</p>
+    <p class="subtitle" id="when-subtitle">Your schedule, your rules. 😏</p>
+
+    <div id="virtual-when-note" class="info-note" style="display:none;">
+      🌸 Virtual date! Pick a day & time when you're free and I'll set everything up — movie, game, or just vibing on call. 💻✨
+    </div>
+    <div id="real-when-note" class="info-note" style="display:none;">
+      🌹 Real date! I'm recovering so I need a little time — but pick something exciting to look forward to! We can always pin a rough "when" 🗓️
+    </div>
 
     <div class="form-section">
       <label class="form-label"><span>🗓️</span>Which date?</label>
       <input class="text-input" id="day-input" type="date" oninput="checkPage3()" style="cursor:pointer;">
-      <div class="or-text" style="margin-top:0.3rem;">not sure yet? just type something like "this saturday" below</div>
-      <input class="text-input" id="day-text" type="text" placeholder='or type freely: "this Saturday", "next week"...' oninput="checkPage3()" style="margin-top:0.5rem;">
+      <div class="or-text" style="margin-top:0.3rem;">not sure? type it below</div>
+      <input class="text-input" id="day-text" type="text" placeholder='e.g. "this Saturday", "next week", "whenever you recover 😊"' oninput="checkPage3()" style="margin-top:0.5rem;">
     </div>
 
     <div class="form-section" style="margin-top:1.2rem;">
       <label class="form-label"><span>⏰</span>What time?</label>
       <input class="text-input" id="time-input" type="time" oninput="checkPage3()" style="cursor:pointer;">
-      <div class="or-text" style="margin-top:0.3rem;">or describe it your way</div>
-      <input class="text-input" id="time-text" type="text" placeholder='e.g. "around 7", "after dinner", "you decide"...' oninput="checkPage3()" style="margin-top:0.5rem;">
+      <div class="or-text" style="margin-top:0.3rem;">or pick a vibe</div>
+      <div class="time-chips" id="time-chips">
+        <div class="time-chip" onclick="pickTimeChip(this, 'Morning chai time ☕')">Morning ☕</div>
+        <div class="time-chip" onclick="pickTimeChip(this, 'Afternoon 🌤️')">Afternoon 🌤️</div>
+        <div class="time-chip" onclick="pickTimeChip(this, 'Evening golden hour 🌇')">Evening 🌇</div>
+        <div class="time-chip" onclick="pickTimeChip(this, 'Late night vibes 🌙')">Late night 🌙</div>
+        <div class="time-chip" onclick="pickTimeChip(this, 'You decide the time 😏')">You decide 😏</div>
+      </div>
+      <input class="text-input" id="time-text" type="text" placeholder='or type: "around 7", "after dinner"...' oninput="checkPage3()" style="margin-top:0.5rem;">
     </div>
 
-    <button class="btn-confirm" id="btn-when" disabled onclick="goTo(4)">Next →</button>
+    <button class="btn-confirm" id="btn-when" disabled onclick="goTo(4)">Next 🌸</button>
     <div class="btn-group" style="margin-top:0.8rem;">
       <button class="btn btn-no" id="no-btn-3" onclick="noJoke(3)">I don't do dates 🙃</button>
     </div>
@@ -472,7 +589,7 @@
   </div>
 </div>
 
-<!-- ─── PAGE 4: WHERE? ─── -->
+<!-- PAGE 4: VIRTUAL ACTIVITY or LOCATION (conditional) -->
 <div class="page" id="page4">
   <div class="progress">
     <div class="dot"></div>
@@ -480,32 +597,68 @@
     <div class="dot"></div>
     <div class="dot active"></div>
     <div class="dot"></div>
+    <div class="dot"></div>
   </div>
   <div class="card">
-    <div class="card-watermark">📍</div>
-    <span class="emoji-big">📍</span>
-    <h1><em style="font-family:'Cormorant Garamond',serif; color:var(--rose);">Where</em> should we go?</h1>
-    <p class="subtitle">Choose your vibe. I'll make it happen. No pressure... much. 😅</p>
+    <div class="card-watermark">🌼</div>
+    <span class="emoji-big" id="p4-emoji">📍</span>
+    <h1 id="p4-heading"><em style="font-family:'Cormorant Garamond',serif; color:var(--rose);">Where</em> should we go?</h1>
+    <p class="subtitle" id="p4-subtitle">Choose your vibe.</p>
 
-    <div class="form-section">
-      <label class="form-label"><span>🎯</span>Type of date</label>
-      <div class="chip-group" id="type-chips">
-        <div class="chip" onclick="selectChip(this,'type')">Café ☕</div>
-        <div class="chip" onclick="selectChip(this,'type')">Dinner 🍽️</div>
-        <div class="chip" onclick="selectChip(this,'type')">Walk + Talk 🚶</div>
-        <div class="chip" onclick="selectChip(this,'type')">Movie 🎬</div>
-        <div class="chip" onclick="selectChip(this,'type')">Ice Cream 🍦</div>
-        <div class="chip" onclick="selectChip(this,'type')">You plan it 🎁</div>
+    <!-- Virtual activity section -->
+    <div id="virtual-section" style="display:none;">
+      <div class="form-section">
+        <label class="form-label"><span>💻</span>What should we do?</label>
+        <div class="chip-group" id="vactivity-chips">
+          <div class="chip" onclick="selectChip(this,'type')">Watch a movie together 🎬</div>
+          <div class="chip" onclick="selectChip(this,'type')">Play an online game 🎮</div>
+          <div class="chip" onclick="selectChip(this,'type')">Chai & just talk ☕</div>
+          <div class="chip" onclick="selectChip(this,'type')">Cook the same recipe 👩‍🍳</div>
+          <div class="chip" onclick="selectChip(this,'type')">Stargazing on call 🌌</div>
+          <div class="chip" onclick="selectChip(this,'type')">You plan it 🎁</div>
+        </div>
+      </div>
+      <div class="form-section" style="margin-top:1.2rem;">
+        <label class="form-label"><span>📱</span>Which platform?</label>
+        <div class="chip-group" id="platform-chips">
+          <div class="chip" onclick="selectChip(this,'location')">WhatsApp Video 📱</div>
+          <div class="chip" onclick="selectChip(this,'location')">Google Meet 🎥</div>
+          <div class="chip" onclick="selectChip(this,'location')">Discord 🎧</div>
+          <div class="chip" onclick="selectChip(this,'location')">You choose 😎</div>
+        </div>
       </div>
     </div>
 
-    <div class="form-section" style="margin-top:1.2rem;">
-      <label class="form-label"><span>🗺️</span>Any area in mind?</label>
-      <input class="text-input" id="location-input" type="text" placeholder="e.g. Sector 29, Cyber Hub, anywhere..." oninput="checkPage4()">
-      <div class="or-text">or leave blank & I'll decide 😎</div>
+    <!-- Real date location section -->
+    <div id="real-section" style="display:none;">
+      <div class="form-section">
+        <label class="form-label"><span>🎯</span>Type of date</label>
+        <div class="chip-group" id="type-chips">
+          <div class="chip" onclick="selectChip(this,'type')">Café ☕</div>
+          <div class="chip" onclick="selectChip(this,'type')">Dinner 🍽️</div>
+          <div class="chip" onclick="selectChip(this,'type')">Walk + Talk 🚶</div>
+          <div class="chip" onclick="selectChip(this,'type')">Movie 🎬</div>
+          <div class="chip" onclick="selectChip(this,'type')">Ice Cream 🍦</div>
+          <div class="chip" onclick="selectChip(this,'type')">You plan it 🎁</div>
+        </div>
+      </div>
+      <div class="form-section" style="margin-top:1.2rem;">
+        <label class="form-label"><span>🗺️</span>Your pick — anywhere in Delhi NCR?</label>
+        <div class="chip-group" style="margin-bottom:0.6rem;">
+          <div class="chip" onclick="pickArea(this, 'Cyber Hub, Gurgaon')">Cyber Hub 🏙️</div>
+          <div class="chip" onclick="pickArea(this, 'Connaught Place, Delhi')">CP, Delhi 🏛️</div>
+          <div class="chip" onclick="pickArea(this, 'Sector 29, Gurgaon')">Sector 29 🍜</div>
+          <div class="chip" onclick="pickArea(this, 'Hauz Khas, Delhi')">Hauz Khas 🌿</div>
+          <div class="chip" onclick="pickArea(this, 'Khan Market, Delhi')">Khan Market 🌸</div>
+          <div class="chip" onclick="pickArea(this, 'Saket, Delhi')">Saket 🛍️</div>
+          <div class="chip" onclick="pickArea(this, 'Noida Sector 18')">Noida 18 🌆</div>
+        </div>
+        <input class="text-input" id="location-input" type="text" placeholder="or type your own spot anywhere in Delhi NCR..." oninput="checkPage4()">
+        <div class="or-text">leave blank & I'll decide 😎</div>
+      </div>
     </div>
 
-    <button class="btn-confirm" id="btn-where" disabled onclick="goTo(5)">Next →</button>
+    <button class="btn-confirm" id="btn-where" disabled onclick="goTo(5)">Next 🌼</button>
     <div class="btn-group" style="margin-top:0.8rem;">
       <button class="btn btn-no" id="no-btn-4" onclick="noJoke(4)">Nope, not interested</button>
     </div>
@@ -513,7 +666,7 @@
   </div>
 </div>
 
-<!-- ─── PAGE 5: VIBE CHECK ─── -->
+<!-- PAGE 5: VIBE CHECK -->
 <div class="page" id="page5">
   <div class="progress">
     <div class="dot"></div>
@@ -521,6 +674,7 @@
     <div class="dot"></div>
     <div class="dot"></div>
     <div class="dot active"></div>
+    <div class="dot"></div>
   </div>
   <div class="card">
     <div class="card-watermark">✨</div>
@@ -541,7 +695,7 @@
 
     <div class="form-section" style="margin-top:1.2rem;">
       <label class="form-label"><span>💬</span>Anything else I should know?</label>
-      <input class="text-input" id="extra-input" type="text" placeholder="Allergies, pet peeves, demands... 😂" oninput="">
+      <input class="text-input" id="extra-input" type="text" placeholder="Demands, pet peeves, or just say hi to injured me 😂" oninput="">
     </div>
 
     <button class="btn-confirm" id="btn-vibe" disabled onclick="submitAll()">
@@ -554,22 +708,22 @@
   </div>
 </div>
 
-<!-- ─── PAGE 6: SUCCESS ─── -->
+<!-- PAGE 6: SUCCESS -->
 <div class="page success-bg" id="page6">
-  <div class="card" style="border:1.5px solid rgba(212,67,107,0.2);">
+  <div class="progress" style="opacity:0; pointer-events:none;">
+    <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+    <div class="dot"></div><div class="dot"></div><div class="dot active"></div>
+  </div>
+  <div class="card" style="border:1.5px solid rgba(192,67,107,0.2);">
     <div class="card-watermark">🎉</div>
     <span class="emoji-big" style="animation:none; font-size:4.5rem;">🎊</span>
+    <div id="success-badge" class="virtual-badge">💻 Virtual Date</div>
     <h1 style="font-size:2.1rem;">IT'S A DATE!!! 🥳</h1>
     <p class="subtitle" style="margin-bottom:0.5rem;">Here's what we've locked in —</p>
 
-    <div class="summary-box" id="summary-box">
-      <!-- filled by JS -->
-    </div>
+    <div class="summary-box" id="summary-box"></div>
 
-    <p class="subtitle" style="font-size:0.88rem; margin-top:0.5rem;">
-      <strong style="color:var(--rose);">Harsh is already panicking picking an outfit.</strong><br>
-      He'll text you soon. 😌
-    </p>
+    <p class="subtitle" id="success-note" style="font-size:0.88rem; margin-top:0.5rem;"></p>
     <p style="color:#ccc; font-size:0.78rem; margin-top:1rem;">
       (Notification sent to Harsh — he's probably doing a happy dance right now 💃)
     </p>
@@ -579,40 +733,78 @@
 <!-- Hidden Formspree form -->
 <form id="notify-form" action="https://formspree.io/f/mkovpokp" method="POST" class="hidden-form">
   <input type="text" name="message" id="form-message">
-  <input type="text" name="_subject" value="💌 She Said YES — Date Details Inside!">
+  <input type="text" name="_subject" value="🌸 She Said YES — Date Details Inside!">
 </form>
 
 <script>
-  // ── Floating hearts ──
-  const heartsBg = document.getElementById('heartsBg');
-  const emojis = ['❤️','💕','💖','🌸','✨','💝','🌹','💞','🫧'];
-  for (let i = 0; i < 18; i++) {
-    const h = document.createElement('div');
-    h.className = 'heart-float';
-    h.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-    h.style.cssText = `left:${Math.random()*100}vw; animation-delay:${Math.random()*10}s; animation-duration:${8+Math.random()*7}s; font-size:${0.7+Math.random()*1.3}rem;`;
-    heartsBg.appendChild(h);
+  // Floating flowers
+  const flowersBg = document.getElementById('flowersBg');
+  const floralEmojis = ['🌸','🌺','🌼','🌷','🌻','💐','🌹','🍀','✨','🌿'];
+  for (let i = 0; i < 20; i++) {
+    const f = document.createElement('div');
+    f.className = 'flower-float';
+    f.textContent = floralEmojis[Math.floor(Math.random() * floralEmojis.length)];
+    f.style.cssText = `left:${Math.random()*100}vw; animation-delay:${Math.random()*12}s; animation-duration:${9+Math.random()*7}s; font-size:${0.7+Math.random()*1.4}rem;`;
+    flowersBg.appendChild(f);
   }
 
-  // ── State ──
-  const answers = { day:'', time:'', type:'', location:'', vibe:'', extra:'' };
+  const answers = { mode:'', day:'', time:'', type:'', location:'', vibe:'', extra:'' };
 
-  // ── Navigation ──
   function goTo(page) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.getElementById('page' + page).classList.add('active');
     window.scrollTo(0, 0);
   }
 
-  // ── Chip select ──
+  function selectMode(mode, el) {
+    document.querySelectorAll('.mode-card').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    answers.mode = mode;
+    // Show date note on page 3
+    document.getElementById('virtual-when-note').style.display = mode === 'virtual' ? 'block' : 'none';
+    document.getElementById('real-when-note').style.display = mode === 'real' ? 'block' : 'none';
+    // Set page 4 content
+    if (mode === 'virtual') {
+      document.getElementById('p4-emoji').textContent = '💻';
+      document.getElementById('p4-heading').innerHTML = 'What should we <em style="font-family:\'Cormorant Garamond\',serif; color:var(--rose);">do</em>?';
+      document.getElementById('p4-subtitle').textContent = 'Pick our virtual date activity! 🌐';
+      document.getElementById('virtual-section').style.display = 'block';
+      document.getElementById('real-section').style.display = 'none';
+    } else {
+      document.getElementById('p4-emoji').textContent = '📍';
+      document.getElementById('p4-heading').innerHTML = '<em style="font-family:\'Cormorant Garamond\',serif; color:var(--rose);">Where</em> in Delhi NCR?';
+      document.getElementById('p4-subtitle').textContent = 'Your pick — I\'ll make it happen! 🗺️';
+      document.getElementById('virtual-section').style.display = 'none';
+      document.getElementById('real-section').style.display = 'block';
+    }
+    setTimeout(() => goTo(3), 350);
+  }
+
   function selectChip(el, group) {
     const parent = el.closest('.chip-group');
     parent.querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
     el.classList.add('selected');
     answers[group] = el.textContent.trim();
-    checkPage3();
     checkPage4();
     checkPage5();
+  }
+
+  function pickArea(el, area) {
+    document.querySelectorAll('.chip-group .chip').forEach(c => {
+      if (c.getAttribute('onclick') && c.getAttribute('onclick').startsWith('pickArea')) c.classList.remove('selected');
+    });
+    el.classList.add('selected');
+    document.getElementById('location-input').value = area;
+    answers.location = area;
+    checkPage4();
+  }
+
+  function pickTimeChip(el, val) {
+    document.querySelectorAll('.time-chip').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    document.getElementById('time-text').value = val;
+    answers.time = val;
+    checkPage3();
   }
 
   function checkPage3() {
@@ -637,22 +829,31 @@
     }
     document.getElementById('btn-when').disabled = !(dayVal && timeVal);
   }
+
   function checkPage4() {
-    const ok = answers.type;
+    let ok = false;
+    if (answers.mode === 'virtual') {
+      ok = !!(answers.type && answers.location);
+    } else {
+      ok = !!answers.type;
+      if (ok) {
+        const locInput = document.getElementById('location-input').value.trim();
+        answers.location = locInput || 'Wherever you decide in Delhi NCR 😎';
+      }
+    }
     document.getElementById('btn-where').disabled = !ok;
-    if (ok) answers.location = document.getElementById('location-input').value.trim() || 'Wherever you decide 😎';
-  }
-  function checkPage5() {
-    const ok = answers.vibe;
-    document.getElementById('btn-vibe').disabled = !ok;
   }
 
-  // ── No jokes ──
+  function checkPage5() {
+    document.getElementById('btn-vibe').disabled = !answers.vibe;
+  }
+
+  // No jokes
   const noJokes = [
-    ["Excuse me?? The 'No' button is broken 😤", "Try clicking Yes instead!", "Did you mean YES? 🥺", "My 'No' button doesn't work here 🙈", "That button is just for decoration 😂"],
-    ["Wrong button, try the other one 😭", "No? Your finger clearly slipped 😂", "Did autocorrect press No?", "I'll pretend that didn't happen 🙉", "The universe says YES btw 🌟"],
-    ["Too late, I already told my mom 😂", "The calendar is already blocked 👀", "My heart already RSVP'd for you 💔", "Even your horoscope says yes ♐", "You can't cancel what hasn't been booked 📅"],
-    ["The café is already disappointed 😢", "Your GPS is already plotting the route 👀", "We can stay in Gurgaon, I don't mind 🏙️", "I'll literally go wherever you say 🥺", "Fine, I'll close my eyes and point on a map 🗺️"],
+    ["Excuse me?? The 'No' button is broken 😤", "Try clicking Yes instead!", "Did you mean YES? 🥺", "My 'No' button doesn't work here 🙈", "That button is just decorative 😂"],
+    ["Wrong button, try the other one 😭", "No? Your finger clearly slipped 😂", "Okay but... virtual date? You don't even have to leave home 🥺", "Did autocorrect press No?", "The universe says YES btw 🌸"],
+    ["Too late, I already told my mom 😂", "The calendar is already blocked 👀", "Even your horoscope says yes ♐", "I'll wait till I recover just to take you out 🥺", "You can't cancel what hasn't been booked 📅"],
+    ["The café is already disappointed 😢", "Your GPS is already plotting the route 👀", "We can go ANYWHERE in Delhi NCR, your choice!", "I'll literally go wherever you say 🥺", "Fine, I'll close my eyes and point at the map 🗺️"],
     ["After all that?? 😭", "You've come so far to back out now?!", "Your vibe was literally 'romantic'!! 🌹", "I saw you smile on page 2. Don't lie. 😏", "Okay fine I'll beg. Please? 🙏"],
   ];
   const noCounts = [0,0,0,0,0];
@@ -663,24 +864,35 @@
     document.getElementById('no-msg-'+n).textContent = jokes[idx];
     noCounts[n-1]++;
     const btn = document.getElementById('no-btn-'+n);
-    const r = () => (Math.random()-0.5)*160;
-    btn.style.transform = `translate(${r()}px,${r()}px) rotate(${r()*0.1}deg)`;
-    setTimeout(() => btn.style.transform='', 800);
+    if (btn) {
+      const r = () => (Math.random()-0.5)*160;
+      btn.style.transform = `translate(${r()}px,${r()}px) rotate(${r()*0.1}deg)`;
+      setTimeout(() => btn.style.transform='', 800);
+    }
   }
 
-  // ── Submit ──
   function submitAll() {
-    answers.extra = document.getElementById('extra-input').value.trim() || 'Nothing special (she trusts me 🥹)';
-    answers.location = document.getElementById('location-input').value.trim() || 'Wherever you decide 😎';
+    answers.extra = document.getElementById('extra-input').value.trim() || 'Nothing — she trusts me 🥹';
+    if (answers.mode === 'real') {
+      const loc = document.getElementById('location-input').value.trim();
+      answers.location = loc || 'Wherever you decide in Delhi NCR 😎';
+    }
 
-    // Populate summary
+    const isVirtual = answers.mode === 'virtual';
+
+    // Badge
+    const badge = document.getElementById('success-badge');
+    badge.textContent = isVirtual ? '💻 Virtual Date' : '🌹 Real Date — Worth the Wait!';
+    badge.className = isVirtual ? 'virtual-badge' : 'real-badge';
+
     const rows = [
-      { icon: '🗓️', key: 'Day',      val: answers.day  },
-      { icon: '⏰', key: 'Time',     val: answers.time },
-      { icon: '🎯', key: 'Date Type', val: answers.type },
-      { icon: '📍', key: 'Location', val: answers.location },
-      { icon: '🎭', key: 'Vibe',     val: answers.vibe },
-      { icon: '💬', key: 'Notes',    val: answers.extra },
+      { icon: '🌸', key: 'Date Mode', val: isVirtual ? 'Virtual Date 💻' : 'Real Date (when Harsh recovers) 🌹' },
+      { icon: '🗓️', key: 'Day', val: answers.day },
+      { icon: '⏰', key: 'Time', val: answers.time },
+      { icon: '🎯', key: isVirtual ? 'Activity' : 'Date Type', val: answers.type },
+      { icon: isVirtual ? '📱' : '📍', key: isVirtual ? 'Platform' : 'Location', val: answers.location },
+      { icon: '🎭', key: 'Vibe', val: answers.vibe },
+      { icon: '💬', key: 'Notes', val: answers.extra },
     ];
     document.getElementById('summary-box').innerHTML = rows.map(r => `
       <div class="summary-row">
@@ -691,8 +903,11 @@
         </div>
       </div>`).join('');
 
-    // Send notification
-    const msg = `💌 SHE SAID YES TO A DATE!\n\n📅 Day: ${answers.day}\n⏰ Time: ${answers.time}\n🎯 Type: ${answers.type}\n📍 Location: ${answers.location}\n🎭 Vibe: ${answers.vibe}\n💬 Notes: ${answers.extra}\n\nGO GO GO! 🎉`;
+    document.getElementById('success-note').innerHTML = isVirtual
+      ? '<strong style="color:var(--rose);">Harsh is already setting up his camera angle and lighting.</strong><br>He\'ll text you with the link soon. 🌸😌'
+      : '<strong style="color:var(--rose);">Harsh is already healing faster knowing this is happening.</strong><br>He\'ll text you to plan the details soon. 🌹😌';
+
+    const msg = `🌸 SHE SAID YES!\n\nMode: ${isVirtual ? 'Virtual Date 💻' : 'Real Date 🌹'}\n📅 Day: ${answers.day}\n⏰ Time: ${answers.time}\n🎯 Type: ${answers.type}\n📍 ${isVirtual ? 'Platform' : 'Location'}: ${answers.location}\n🎭 Vibe: ${answers.vibe}\n💬 Notes: ${answers.extra}\n\nGO GO GO! 🎉`;
     document.getElementById('form-message').value = msg;
     const form = document.getElementById('notify-form');
     fetch(form.action, { method:'POST', body: new FormData(form), headers:{'Accept':'application/json'} }).catch(()=>{});
@@ -702,12 +917,13 @@
   }
 
   function confetti() {
-    const colors = ['#d4436b','#c9935a','#7c4dff','#00bcd4','#ff9800','#4caf50','#e91e63'];
+    const colors = ['#c0436b','#c9935a','#7aab6e','#e8799a','#a8c9a0','#f7c4d0','#4caf50','#e91e63'];
     for (let i = 0; i < 100; i++) {
       const c = document.createElement('div');
       c.className = 'confetti-piece';
       const size = 6 + Math.random()*10;
-      c.style.cssText = `left:${Math.random()*100}vw; width:${size}px; height:${size}px; background:${colors[Math.floor(Math.random()*colors.length)]}; animation-duration:${2+Math.random()*2.5}s; animation-delay:${Math.random()*0.8}s; border-radius:${Math.random()>0.5?'50%':'3px'};`;
+      const shapes = ['50%','3px','0'];
+      c.style.cssText = `left:${Math.random()*100}vw; width:${size}px; height:${size}px; background:${colors[Math.floor(Math.random()*colors.length)]}; animation-duration:${2+Math.random()*2.5}s; animation-delay:${Math.random()*0.8}s; border-radius:${shapes[Math.floor(Math.random()*shapes.length)]};`;
       document.body.appendChild(c);
       setTimeout(()=>c.remove(), 5000);
     }
